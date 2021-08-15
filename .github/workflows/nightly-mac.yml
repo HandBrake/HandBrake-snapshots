@@ -1,8 +1,11 @@
 name: macOS build
 
 on:
-  workflow_dispatch: 
+  schedule:
+    - cron:  '30 7 * * 1,5'
   
+  workflow_dispatch: 
+   
 jobs:
   build:
     name: Build on macOS
