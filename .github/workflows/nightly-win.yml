@@ -1,8 +1,11 @@
 name: Windows Build
 
 on:
-  workflow_dispatch:
-
+  schedule:
+    - cron:  '30 7 * * 1,5'
+  
+  workflow_dispatch: 
+  
 jobs:
   build_mingw_arm:
     name: CLI / LibHB (ARM)
