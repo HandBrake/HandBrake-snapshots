@@ -1,0 +1,82 @@
+name: macOS build
+
+on:
+  workflow_dispatch: 
+  
+jobs:
+  build:
+    name: Build on macOS
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Toolchain Cache
+      id: mac-toolchain
+      uses: actions/cache@v2
+      with:
+        path: /usr/local
+        key: mac-toolchain
+        
+    - name: Download the Source Code
+      run: |
+        git clone https://github.com/HandBrake/HandBrake.git
+        cd HandBrake
+        git submodule update --init --recursive
+
+    - name: Setup Environment
+      if: steps.mac-toolchain.outputs.cache-hit != 'true'
+      run: |
+        HandBrake/scripts/mac-toolchain-build /usr/local
+
+    - name: Build HandBrake
+      run: |
+        cd HandBrake
+        ./configure
+        cd build
+        make ub && make pkg.create
+
+    - name: Upload Assets
+      uses: actions/upload-artifact@v2
+      with:
+        name: HandBrake-macos
+        path: ./HandBrake/build/pkg/*.dmg
+
+
+  deploy_nightly:
+    name: Deploy Nightly Build
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v2
+       
+      - name: Download Artifacts - Universal Binaries
+        uses: actions/download-artifact@v2
+        with:
+          name: HandBrake-macos
+          path: mac/
+          
+      # Generate Hashes
+      - name: Generate SHA265 Hashes
+        run: |
+          cd mac
+          sha256sum * > sha256.txt
+      
+      # Publishing the Release
+      - name: Remove the old Release
+        uses: dev-drprasad/delete-older-releases@v0.2.0
+        with:
+          keep_latest: 0
+          delete_tag_pattern: "mac"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: "mac/*.*"
+          name: "Snapshots for macOS"
+          bodyFile: .github/workflows/mac_rel_body.md
+          prerelease: true
+          replacesArtifacts: false
+          allowUpdates: false
+          tag: mac
+          token: ${{ secrets.GITHUB_TOKEN }}

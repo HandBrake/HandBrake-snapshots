@@ -1,0 +1,344 @@
+name: Windows Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build_mingw_arm:
+    name: CLI / LibHB (ARM)
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+
+    - name: Environment Setup
+      run: |
+        sudo apt-get purge cmake -y
+        sudo apt-get install automake autoconf build-essential intltool libtool libtool-bin make nasm patch tar yasm zlib1g-dev ninja-build gzip pax cmake
+        sudo pip3 install meson
+        
+    - name: Setup Toolchain
+      run: |
+        wget https://github.com/HandBrake/HandBrake-toolchains/releases/download/1.0/llvm-mingw-msvcrt.tar.gz
+        SHA=$(sha1sum llvm-mingw-msvcrt.tar.gz)
+        EXPECTED="ea5eaf2f67c4e0ca40a6d6889de51bb4ce9ca3c6  llvm-mingw-msvcrt.tar.gz"
+        if [ "$SHA" == "$EXPECTED" ];
+        then
+            echo "Toolchain Verified. Extracting ..."
+            mkdir toolchains
+            mv llvm-mingw-msvcrt.tar.gz toolchains
+            cd toolchains
+            tar xvf llvm-mingw-msvcrt.tar.gz
+        else
+            echo "Toolchain Verification FAILED. Exiting!"
+            return -1
+        fi
+        
+    - name: Build CLI and LibHB
+      run: |
+        CWDIR=$(pwd)
+        export PATH="$CWDIR/toolchains/llvm-mingw-msvcrt/bin:${PATH}"
+        export PATH=/usr/bin:$PATH
+        git clone https://github.com/HandBrake/HandBrake.git
+        cd HandBrake
+        ./configure --cross=aarch64-w64-mingw32 --enable-mf --launch-jobs=0 --launch
+        cd build
+        make pkg.create.zip
+        
+    - name: Upload HandBrakeCLI
+      uses: actions/upload-artifact@v2
+      with:
+        name: HandBrakeCLI_ARM64
+        path: ./HandBrake/build/pkg/*.zip
+
+    - name: Upload LibHB
+      uses: actions/upload-artifact@v2
+      with:
+        name: LibHandBrake_ARM64
+        path: ./HandBrake/build/libhb/hb.dll
+  
+  build_gui_arm64:
+    name: Windows UI (ARM)
+    runs-on: windows-latest
+    needs: build_mingw_arm
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build Windows GUI
+      run: |
+        git clone https://github.com/HandBrake/HandBrake.git
+        cd HandBrake
+        git rev-parse --short HEAD > gitHash.txt
+        
+    - name: NuGet Restore
+      run: |
+         choco install nuget.commandline
+         cd HandBrake/win/CS/
+         nuget restore HandBrake.sln
+
+    - name: Download LibHandBrake ARM 64
+      uses: actions/download-artifact@v2
+      with:
+       name: LibHandBrake_ARM64
+       path: HandBrake/win/CS/HandBrakeWPF/bin/publish
+
+    - name: Build Windows GUI
+      run: |
+        cd HandBrake
+        $env:Path += ";C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin"
+        msbuild win\cs\build.xml /t:arm64 
+
+    - name: Prepare Package
+      run: |
+        echo "Setting up context"
+        set /p gitHash=<HandBrake/gitHash.txt
+        set FILENAME=HandBrake-%gitHash%-arm64-Win_GUI.exe
+        set FILENAME_MSI=HandBrake-%gitHash%-arm64-Win_GUI.msi
+        set FILENAMEZIP=HandBrake-%gitHash%-arm64-Win_GUI.zip
+        echo %FILENAME%
+        echo %FILENAME_MSI%
+        echo %FILENAMEZIP%
+        echo "Renaming Windows Installer file"
+        cd HandBrake/win/CS/HandBrakeWPF/bin/publish/
+        dir
+        move HandBrake-*-Win_GUI.exe %FILENAME%
+        move HandBrake-*-Win_GUI.msi %FILENAME_MSI%
+        dir
+        cd ..
+        echo "Creating Portable Zip"
+        dir
+        rmdir /q /s Debug
+        move publish HandBrake
+        dir
+        7z a %FILENAMEZIP% * -x!HandBrake\%FILENAME% -x!HandBrake\*.nsi -x!HandBrake\*.config -x!*HandBrake\*.xml -x!*HandBrake\*.pdb -x!*HandBrake\*.bmp  -x!HandBrake\*.zip -x!HandBrake\*.bz2 -x!HandBrake\*.msi -mx9
+        dir
+      shell: cmd
+
+    - name: Upload HandBrake exe Installer
+      uses: actions/upload-artifact@v2
+      with:
+        name: HandBrake-arm64-WinExe
+        path: HandBrake/win/CS/HandBrakeWPF/bin/HandBrake/*Win_GUI.exe
+
+    - name: Upload HandBrake msi Installer
+      uses: actions/upload-artifact@v2
+      with:
+        name: HandBrake-arm64-WinMSI
+        path: HandBrake/win/CS/HandBrakeWPF/bin/HandBrake/*Win_GUI.msi
+    
+    - name: Upload HandBrake Portable
+      uses: actions/upload-artifact@v2
+      with:
+        name: HandBrake-arm64-WinPortable
+        path: HandBrake/win/CS/HandBrakeWPF/bin/*-Win_GUI.zip
+        
+  build_mingw_x64:
+    name: CLI / LibHB
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+
+    - name: Environment Setup
+      run: |
+        sudo apt-get purge cmake -y
+        sudo apt-get install automake autoconf build-essential intltool libtool libtool-bin make nasm patch tar yasm zlib1g-dev ninja-build gzip pax cmake
+        sudo pip3 install meson
+
+    - name: Setup Toolchain
+      run: |
+        wget https://github.com/bradleysepos/mingw-w64-build/releases/download/9.2.0/mingw-w64-toolchain-9.2.0-linux-x86_64.tar.gz
+        SHA=$(sha1sum mingw-w64-toolchain-9.2.0-linux-x86_64.tar.gz)
+        EXPECTED="560ceb85cdf2783c68226d3761f865c42101c3f6  mingw-w64-toolchain-9.2.0-linux-x86_64.tar.gz"
+        if [ "$SHA" == "$EXPECTED" ];
+        then
+            echo "Toolchain Verified. Extracting ..."
+            mkdir toolchains
+            mv mingw-w64-toolchain-9.2.0-linux-x86_64.tar.gz toolchains
+            cd toolchains
+            tar xvf mingw-w64-toolchain-9.2.0-linux-x86_64.tar.gz
+            cd mingw-w64-toolchain-9.2.0-linux-x86_64/mingw-w64-x86_64/
+            pwd
+        else
+            echo "Toolchain Verification FAILED. Exiting!"
+            return -1
+        fi
+
+    - name: Build CLI and LibHB
+      run: |
+        CWDIR=$(pwd)
+        export PATH="$CWDIR/toolchains/mingw-w64-toolchain-9.2.0-linux-x86_64/mingw-w64-x86_64/bin:${PATH}"
+        export PATH=/usr/bin:$PATH
+        git clone https://github.com/HandBrake/HandBrake.git
+        cd HandBrake
+        ./configure --cross=x86_64-w64-mingw32 --enable-qsv --enable-vce --enable-nvenc --launch-jobs=0 --launch
+        cd build
+        make pkg.create.zip
+
+    - name: Upload HandBrakeCLI
+      uses: actions/upload-artifact@v2
+      with:
+        name: HandBrakeCLI
+        path: ./HandBrake/build/pkg/*.zip
+
+    - name: Upload LibHB
+      uses: actions/upload-artifact@v2
+      with:
+        name: LibHandBrake
+        path: ./HandBrake/build/libhb/hb.dll
+
+  build_gui_x64:
+    name: Windows UI
+    runs-on: windows-latest
+    needs: build_mingw_x64
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build Windows GUI
+      run: |
+        git clone https://github.com/HandBrake/HandBrake.git
+        cd HandBrake
+        git rev-parse --short HEAD > gitHash.txt
+        
+    - name: NuGet Restore
+      run: |
+         choco install nuget.commandline
+         cd HandBrake/win/CS/
+         nuget restore HandBrake.sln
+
+    - name: Download LibHandBrake
+      uses: actions/download-artifact@v2
+      with:
+       name: LibHandBrake
+       path: HandBrake/win/CS/HandBrakeWPF/bin/publish
+
+    - name: Build Windows GUI
+      run: |
+        cd HandBrake
+        $env:Path += ";C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin"
+        msbuild win\cs\build.xml /t:x64 
+        
+    - name: Prepare Package
+      run: |
+        echo "Setting up context"
+        set /p gitHash=<HandBrake/gitHash.txt
+        set FILENAME=HandBrake-%gitHash%-x86_64-Win_GUI.exe
+        set FILENAME_MSI=HandBrake-%gitHash%-x86_64-Win_GUI.msi
+        set FILENAMEZIP=HandBrake-%gitHash%-x86_64-Win_GUI.zip
+        echo %FILENAME%
+        echo %FILENAME_MSI%
+        echo %FILENAMEZIP%
+        echo "Renaming Windows Installer file"
+        cd HandBrake/win/CS/HandBrakeWPF/bin/publish/
+        dir
+        move HandBrake-*-Win_GUI.exe %FILENAME%
+        move HandBrake-*-Win_GUI.msi %FILENAME_MSI%
+        dir
+        cd ..
+        dir
+        echo "Creating Portable Zip"
+        rmdir /q /s Debug
+        move publish HandBrake
+        7z a %FILENAMEZIP% * -x!HandBrake\%FILENAME% -x!HandBrake\*.nsi -x!HandBrake\*.config -x!*HandBrake\*.xml -x!*HandBrake\*.pdb -x!*HandBrake\*.bmp  -x!HandBrake\*.zip -x!HandBrake\*.bz2 -x!HandBrake\*.msi -mx9
+      shell: cmd
+      
+    - name: Upload HandBrake exe Installer
+      uses: actions/upload-artifact@v2
+      with:
+        name: HandBrake-x86_64-WinExe
+        path: HandBrake/win/CS/HandBrakeWPF/bin/HandBrake/*-Win_GUI.exe
+
+    - name: Upload HandBrake msi Installer
+      uses: actions/upload-artifact@v2
+      with:
+        name: HandBrake-x86_64-WinMSI
+        path: HandBrake/win/CS/HandBrakeWPF/bin/HandBrake/*-Win_GUI.msi
+        
+    - name: Upload HandBrake Portable
+      uses: actions/upload-artifact@v2
+      with:
+        name: HandBrake-x86_64-WinPortable
+        path: HandBrake/win/CS/HandBrakeWPF/bin/*-Win_GUI.zip
+        
+  deploy_nightly:
+    name: Deploy Nightly Build
+    runs-on: ubuntu-latest
+    needs: [build_gui_x64, build_gui_arm64]
+    steps:
+      - uses: actions/checkout@v2
+       
+      # X64 Devices
+      - name: Download Artifacts - CLI x64
+        uses: actions/download-artifact@v2
+        with:
+          name: HandBrakeCLI
+          path: win/
+          
+      - name: Download Artifacts - GUI x64 MSI
+        uses: actions/download-artifact@v2
+        with:
+          name: HandBrake-x86_64-WinMSI
+          path: win/
+          
+      - name: Download Artifacts - GUI x64 EXE
+        uses: actions/download-artifact@v2
+        with:
+          name: HandBrake-x86_64-WinExe
+          path: win/
+       
+      - name: Download Artifacts - GUI x64 Portable
+        uses: actions/download-artifact@v2
+        with:
+          name: HandBrake-x86_64-WinPortable
+          path: win/
+      
+      # ARM DEVICES
+      - name: Download Artifacts - CLI ARM64
+        uses: actions/download-artifact@v2
+        with:
+          name: HandBrakeCLI_ARM64
+          path: win/
+          
+      - name: Download Artifacts - GUI ARM64 MSI
+        uses: actions/download-artifact@v2
+        with:
+          name: HandBrake-arm64-WinMSI
+          path: win/
+          
+      - name: Download Artifacts - GUI ARM64 EXE
+        uses: actions/download-artifact@v2
+        with:
+          name: HandBrake-arm64-WinExe
+          path: win/
+
+      - name: Download Artifacts - GUI ARM64 Portable
+        uses: actions/download-artifact@v2
+        with:
+          name: HandBrake-arm64-WinPortable
+          path: win/
+       
+      # Generate Hashes
+      - name: Generate SHA265 Hashes
+        run: |
+          cd win
+          sha256sum * > sha256.txt
+      
+      # Publishing the Release
+      - name: Remove the old Release
+        uses: dev-drprasad/delete-older-releases@v0.2.0
+        with:
+          keep_latest: 0
+          delete_tag_pattern: "win"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: "win/*.*"
+          name: "Snapshots for Windows"
+          bodyFile: .github/workflows/win_rel_body.md
+          prerelease: true
+          replacesArtifacts: false
+          allowUpdates: false
+          tag: win
+          token: ${{ secrets.GITHUB_TOKEN }}
