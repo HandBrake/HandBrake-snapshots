@@ -63,6 +63,13 @@ jobs:
         run: |
           cd mac
           sha256sum * > sha256.txt
+          cp sha256.txt ../.github/workflows/
+          cd ..
+          cd .github/workflows/
+          sed -e 's/  / | /' -i sha256.txt
+          sed -e 's/^/| /'  -i sha256.txt
+          sed -e 's/$/ |/' -i sha256.txt
+          cat sha256.txt >> mac_rel_body.md
       
       # Publishing the Release
       - name: Remove the old Release

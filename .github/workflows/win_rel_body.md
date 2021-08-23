@@ -12,6 +12,15 @@ You can see all the latest changes on our GitHub Timeline.
 
 ### Notices
 
- * "Safe Mode" builds have the hardware encoders disabled. (NvENC, VCE and QuickSync) For use if the application fails to start with the normal build.
- * Snapshots are published periodically and every few weeks. This means that the builds can sometimes lag behind the git master.
+ * Snapshots are published twice weekly if there are changes on our main repository. 
  * The Windows MSI installer is considered Experimental. Please uninstall fully any previous version before installing.
+
+### x86_64 and ARM64 Builds
+
+ * Builds with "aarch64" or "arm64" are for ARM based devices.
+ * Builds with "x86_64" in the name are for x64 Intel or AMD based devices. 
+
+### File Information
+
+| SHA256 | Filename |
+|----------|--------|
