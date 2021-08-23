@@ -2,8 +2,9 @@
 
 HandBrake is an open-source video transcoder available for Linux, Mac, and Windows, licensed under the [GNU General Public License (GPL) Version 2](LICENSE).
 
-This repository contains pre-release builds of our main branch which means they may or may not be stable and probably won't be documented. As such, your mileage may vary.
-This, these development builds are better suited for more experienced users and developers wishing to test the latest code. That said, everyone is welcome to give them a shot and provide feedback.
+This repository contains pre-release builds of our main development branch which means they may or may not be stable and probably won't be documented. As such, your mileage may vary.
+
+These development builds are better suited for more experienced users and developers wishing to test the latest code. That said, everyone is welcome to give them a shot and provide feedback.
 
 Please note, these builds are not digitally signed and are built on a public build platform. Use at your own risk! 
 
