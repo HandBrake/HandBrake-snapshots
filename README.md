@@ -22,7 +22,7 @@ Please don't assume we know about your bug or issue. If you see something that i
 | macOS             | [Download](https://github.com/HandBrake/handbrake-snapshots/releases/tag/mac) | [![macOS build](https://github.com/HandBrake/handbrake-snapshots/actions/workflows/nightly-mac.yml/badge.svg)](https://github.com/HandBrake/handbrake-snapshots/actions/workflows/nightly-mac.yml)  |
 | Linux (Flatpak)   | [Download](https://github.com/HandBrake/handbrake-snapshots/releases/tag/lin) | [![Flatpak Build](https://github.com/HandBrake/HandBrake-snapshots/actions/workflows/nightly-linux.yml/badge.svg)](https://github.com/HandBrake/HandBrake-snapshots/actions/workflows/nightly-linux.yml) |
 
-*1 Note, if a build is marked as failed, previous builds may be available for download!
+*1 Please note that if a build is marked as failed, previous builds may still be available for download!
 
 ### Update Frequency
 
