@@ -73,7 +73,6 @@ jobs:
         cd HandBrake
         git rev-parse --short HEAD > gitHash.txt
         git show -s --format=%cs > hb_date.txt
-      shell: cmd
         
     - name: NuGet Restore
       run: |
@@ -207,8 +206,7 @@ jobs:
         cd HandBrake
         git rev-parse --short HEAD > gitHash.txt
         git show -s --format=%cs > hb_date.txt
-      shell: cmd
-        
+
     - name: NuGet Restore
       run: |
          choco install nuget.commandline
