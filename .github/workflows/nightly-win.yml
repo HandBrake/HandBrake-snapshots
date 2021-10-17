@@ -72,6 +72,7 @@ jobs:
         git clone https://github.com/HandBrake/HandBrake.git
         cd HandBrake
         git rev-parse --short HEAD > gitHash.txt
+        git show -s --format=%cs > hb_date.txt
         
     - name: NuGet Restore
       run: |
@@ -95,9 +96,11 @@ jobs:
       run: |
         echo "Setting up context"
         set /p gitHash=<HandBrake/gitHash.txt
-        set FILENAME=HandBrake-%gitHash%-arm64-Win_GUI.exe
-        set FILENAME_MSI=HandBrake-%gitHash%-arm64-Win_GUI.msi
-        set FILENAMEZIP=HandBrake-%gitHash%-arm64-Win_GUI.zip
+        set /p HBDATE=<hb_date.txt
+        set HBDATE=%HBDATE:-=%    
+        set FILENAME=HandBrake-%HBDATE%-%gitHash%-arm64-Win_GUI.exe
+        set FILENAME_MSI=HandBrake-%HBDATE%-%gitHash%-arm64-Win_GUI.msi
+        set FILENAMEZIP=HandBrake-%HBDATE%-%gitHash%-arm64-Win_GUI.zip
         echo %FILENAME%
         echo %FILENAME_MSI%
         echo %FILENAMEZIP%
@@ -202,6 +205,7 @@ jobs:
         git clone https://github.com/HandBrake/HandBrake.git
         cd HandBrake
         git rev-parse --short HEAD > gitHash.txt
+        git show -s --format=%cs > hb_date.txt
         
     - name: NuGet Restore
       run: |
@@ -225,9 +229,11 @@ jobs:
       run: |
         echo "Setting up context"
         set /p gitHash=<HandBrake/gitHash.txt
-        set FILENAME=HandBrake-%gitHash%-x86_64-Win_GUI.exe
-        set FILENAME_MSI=HandBrake-%gitHash%-x86_64-Win_GUI.msi
-        set FILENAMEZIP=HandBrake-%gitHash%-x86_64-Win_GUI.zip
+        set /p HBDATE=<hb_date.txt
+        set HBDATE=%HBDATE:-=%
+        set FILENAME=HandBrake-%HBDATE%-%gitHash%-x86_64-Win_GUI.exe
+        set FILENAME_MSI=HandBrake-%HBDATE%-%gitHash%-x86_64-Win_GUI.msi
+        set FILENAMEZIP=HandBrake-%HBDATE%-%gitHash%-x86_64-Win_GUI.zip
         echo %FILENAME%
         echo %FILENAME_MSI%
         echo %FILENAMEZIP%
