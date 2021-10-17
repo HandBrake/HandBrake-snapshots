@@ -98,6 +98,7 @@ jobs:
         set /p gitHash=<HandBrake/gitHash.txt
         set /p HBDATE=<HandBrake/hb_date.txt
         set HBDATE=%HBDATE:-=%    
+        set HBDATE=%HBDATE:~0,8%
         set FILENAME=HandBrake-%HBDATE%-%gitHash%-arm64-Win_GUI.exe
         set FILENAME_MSI=HandBrake-%HBDATE%-%gitHash%-arm64-Win_GUI.msi
         set FILENAMEZIP=HandBrake-%HBDATE%-%gitHash%-arm64-Win_GUI.zip
@@ -231,6 +232,7 @@ jobs:
         set /p gitHash=<HandBrake/gitHash.txt
         set /p HBDATE=<HandBrake/hb_date.txt
         set HBDATE=%HBDATE:-=%
+        set HBDATE=%HBDATE:~0,8%
         set FILENAME=HandBrake-%HBDATE%-%gitHash%-x86_64-Win_GUI.exe
         set FILENAME_MSI=HandBrake-%HBDATE%-%gitHash%-x86_64-Win_GUI.msi
         set FILENAMEZIP=HandBrake-%HBDATE%-%gitHash%-x86_64-Win_GUI.zip
