@@ -23,14 +23,10 @@ jobs:
         sudo pip3 install meson
         sudo apt-get install flatpak flatpak-builder
         sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-        sudo flatpak install -y flathub org.freedesktop.Sdk//18.08
-        sudo flatpak install -y flathub org.freedesktop.Platform//18.08
-        sudo flatpak install -y flathub org.freedesktop.Sdk//19.08
-        sudo flatpak install -y flathub org.freedesktop.Platform//19.08 
-        sudo flatpak install -y flathub org.gnome.Platform//3.36
-        sudo flatpak install -y flathub org.gnome.Platform//40
-        sudo flatpak install -y flathub org.gnome.Sdk//3.36
-        sudo flatpak install -y flathub org.gnome.Sdk//40
+        sudo flatpak install -y flathub org.freedesktop.Sdk//21.08
+        sudo flatpak install -y flathub org.freedesktop.Platform//21.08
+        sudo flatpak install -y flathub org.gnome.Platform//41
+        sudo flatpak install -y flathub org.gnome.Sdk//41
         
     - name: Download the Source Code
       run: |
