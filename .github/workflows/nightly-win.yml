@@ -62,7 +62,7 @@ jobs:
   
   build_gui_arm64:
     name: Windows UI (ARM)
-    runs-on: windows-latest
+    runs-on: windows-2022
     needs: build_mingw_arm
     steps:
     - uses: actions/checkout@v2
@@ -89,7 +89,7 @@ jobs:
     - name: Build Windows GUI
       run: |
         cd HandBrake
-        $env:Path += ";C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin"
+        $env:Path += ";C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin"
         msbuild win\cs\build.xml /t:arm64 
 
     - name: Prepare Package
@@ -196,7 +196,7 @@ jobs:
 
   build_gui_x64:
     name: Windows UI
-    runs-on: windows-latest
+    runs-on: windows-2022
     needs: build_mingw_x64
     steps:
     - uses: actions/checkout@v2
@@ -223,7 +223,7 @@ jobs:
     - name: Build Windows GUI
       run: |
         cd HandBrake
-        $env:Path += ";C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin"
+        $env:Path += ";C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin"
         msbuild win\cs\build.xml /t:x64 
         
     - name: Prepare Package
