@@ -34,12 +34,12 @@ jobs:
     
     - name: Build HandBrake
       run: |
-        cd HandBrake
-        ./configure --flatpak
-        cd build
         free -m -t
         df -h
         du -hs
+        cd HandBrake
+        ./configure --flatpak
+        cd build
         nice make pkg.create.flatpak --jobs=1
 
     - name: Upload Assets
