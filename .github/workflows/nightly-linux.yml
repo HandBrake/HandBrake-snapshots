@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     name: Build on Linux
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
 
@@ -34,11 +34,8 @@ jobs:
     
     - name: Build HandBrake
       run: |
-        free -m -t
-        df -h
-        du -hs
         cd HandBrake
-        ./configure --flatpak
+        ./configure --flatpak --enable-qsv
         cd build
         nice make pkg.create.flatpak --jobs=1
 
