@@ -35,8 +35,9 @@ jobs:
     
     - name: Build HandBrake
       run: |
+        free -m -t
         cd HandBrake
-        ./configure --flatpak --enable-qsv
+        ./configure --flatpak
         cd build
         nice make pkg.create.flatpak --jobs=1
 
