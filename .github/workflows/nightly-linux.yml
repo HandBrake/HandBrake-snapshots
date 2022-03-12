@@ -35,7 +35,7 @@ jobs:
     - name: Build HandBrake
       run: |
         cd HandBrake
-        ./configure --launch-jobs=1 --flatpak
+        ./configure --launch-jobs=1 --flatpak --enable-qsv --enable-vce
         cd build
         nice make pkg.create.flatpak --jobs=1
 
