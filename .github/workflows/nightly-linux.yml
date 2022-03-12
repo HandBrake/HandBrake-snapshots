@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     name: Build on Linux
-    runs-on: ubuntu-20.04
+    runs-on: self-hosted
     steps:
     - uses: actions/checkout@v2
 
@@ -35,16 +35,8 @@ jobs:
     
     - name: Build HandBrake
       run: |
-        free -m -t
-        dd if=/dev/zero of=swapfile.img bs=4096 count=1M
-        mkswap swapfile.img
-        sudo swapon swapfile.img
-        free -h && sudo sysctl -w vm.drop_caches=3 && sudo sync && echo 3 | sudo tee /proc/sys/vm/drop_caches && free -h
-        df -h
-        free -m -t
         cd HandBrake
         ./configure --launch-jobs=1 --flatpak
-        free -h && sudo sysctl -w vm.drop_caches=3 && sudo sync && echo 3 | sudo tee /proc/sys/vm/drop_caches && free -h
         cd build
         nice make pkg.create.flatpak --jobs=1
 
