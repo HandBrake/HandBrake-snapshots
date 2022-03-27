@@ -1,9 +1,6 @@
 name: Flatpak Build
 
-on:
-  schedule:
-    - cron:  '30 7 * * 1,5'
-    
+on:  
   workflow_dispatch: 
   
 jobs:
