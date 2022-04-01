@@ -15,21 +15,23 @@ jobs:
 
     - name: Toolchain Cache
       id: mac-toolchain
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
-        path: /usr/local
+        path: ~/mac-toolchain
         key: mac-toolchain
-        
+
     - name: Download the Source Code
       run: |
         git clone https://github.com/HandBrake/HandBrake.git
-        cd HandBrake
-        git submodule update --init --recursive
+
+    - name: Setup Path
+      run: |
+        echo ~/mac-toolchain/bin >> $GITHUB_PATH
 
     - name: Setup Environment
       if: steps.mac-toolchain.outputs.cache-hit != 'true'
       run: |
-        HandBrake/scripts/mac-toolchain-build /usr/local
+        HandBrake/scripts/mac-toolchain-build ~/mac-toolchain
 
     - name: Build HandBrake
       run: |
