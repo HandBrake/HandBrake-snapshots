@@ -6,7 +6,7 @@ on:
 jobs:
   build:
     name: Build on Linux
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
 
