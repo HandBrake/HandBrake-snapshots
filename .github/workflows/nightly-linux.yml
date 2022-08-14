@@ -21,8 +21,8 @@ jobs:
         sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
         sudo flatpak install -y flathub org.freedesktop.Sdk//21.08
         sudo flatpak install -y flathub org.freedesktop.Platform//21.08
-        sudo flatpak install -y flathub org.gnome.Platform//41
-        sudo flatpak install -y flathub org.gnome.Sdk//41
+        sudo flatpak install -y flathub org.gnome.Platform//42
+        sudo flatpak install -y flathub org.gnome.Sdk//42
         sudo apt-get upgrade -y
         
     - name: Download the Source Code
