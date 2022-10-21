@@ -8,7 +8,7 @@ jobs:
     name: Build on Linux
     runs-on: self-hosted
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Environment Setup
       run: |
@@ -51,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
        
       - name: Download Artifacts - Flatpak Binaries
         uses: actions/download-artifact@v2
