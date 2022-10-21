@@ -49,13 +49,13 @@ jobs:
         make pkg.create.zip
         
     - name: Upload HandBrakeCLI
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: HandBrakeCLI_ARM64
         path: ./HandBrake/build/pkg/*.zip
 
     - name: Upload LibHB
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: LibHandBrake_ARM64
         path: ./HandBrake/build/libhb/hb.dll
@@ -122,19 +122,19 @@ jobs:
       shell: cmd
 
     - name: Upload HandBrake exe Installer
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: HandBrake-arm64-WinExe
         path: HandBrake/win/CS/HandBrakeWPF/bin/HandBrake/*Win_GUI.exe
 
     - name: Upload HandBrake msi Installer
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: HandBrake-arm64-WinMSI
         path: HandBrake/win/CS/HandBrakeWPF/bin/HandBrake/*Win_GUI.msi
     
     - name: Upload HandBrake Portable
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: HandBrake-arm64-WinPortable
         path: HandBrake/win/CS/HandBrakeWPF/bin/*-Win_GUI.zip
@@ -183,13 +183,13 @@ jobs:
         make pkg.create.zip
 
     - name: Upload HandBrakeCLI
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: HandBrakeCLI
         path: ./HandBrake/build/pkg/*.zip
 
     - name: Upload LibHB
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: LibHandBrake
         path: ./HandBrake/build/libhb/hb.dll
@@ -254,19 +254,19 @@ jobs:
       shell: cmd
       
     - name: Upload HandBrake exe Installer
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: HandBrake-x86_64-WinExe
         path: HandBrake/win/CS/HandBrakeWPF/bin/HandBrake/*-Win_GUI.exe
 
     - name: Upload HandBrake msi Installer
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: HandBrake-x86_64-WinMSI
         path: HandBrake/win/CS/HandBrakeWPF/bin/HandBrake/*-Win_GUI.msi
         
     - name: Upload HandBrake Portable
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: HandBrake-x86_64-WinPortable
         path: HandBrake/win/CS/HandBrakeWPF/bin/*-Win_GUI.zip
