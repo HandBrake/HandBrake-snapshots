@@ -13,7 +13,6 @@ You can see all the latest changes on our GitHub Timeline.
 ### Notices
 
  * Snapshots are published twice weekly if there are changes on our main repository. 
- * The Windows MSI installer is considered Experimental. Please uninstall fully any previous version before installing.
 
 ### x86_64 and ARM64 Builds
 
