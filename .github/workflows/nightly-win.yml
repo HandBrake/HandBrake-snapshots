@@ -100,16 +100,13 @@ jobs:
         set HBDATE=%HBDATE:-=%    
         set HBDATE=%HBDATE:~0,8%
         set FILENAME=HandBrake-%HBDATE%-%gitHash%-arm64-Win_GUI.exe
-        set FILENAME_MSI=HandBrake-%HBDATE%-%gitHash%-arm64-Win_GUI.msi
         set FILENAMEZIP=HandBrake-%HBDATE%-%gitHash%-arm64-Win_GUI.zip
         echo %FILENAME%
-        echo %FILENAME_MSI%
         echo %FILENAMEZIP%
         echo "Renaming Windows Installer file"
         cd HandBrake/win/CS/HandBrakeWPF/bin/publish/
         dir
         move HandBrake-*-Win_GUI.exe %FILENAME%
-        move HandBrake-*-Win_GUI.msi %FILENAME_MSI%
         dir
         cd ..
         echo "Creating Portable Zip"
@@ -126,12 +123,6 @@ jobs:
       with:
         name: HandBrake-arm64-WinExe
         path: HandBrake/win/CS/HandBrakeWPF/bin/HandBrake/*Win_GUI.exe
-
-    - name: Upload HandBrake msi Installer
-      uses: actions/upload-artifact@v3
-      with:
-        name: HandBrake-arm64-WinMSI
-        path: HandBrake/win/CS/HandBrakeWPF/bin/HandBrake/*Win_GUI.msi
     
     - name: Upload HandBrake Portable
       uses: actions/upload-artifact@v3
@@ -234,16 +225,13 @@ jobs:
         set HBDATE=%HBDATE:-=%
         set HBDATE=%HBDATE:~0,8%
         set FILENAME=HandBrake-%HBDATE%-%gitHash%-x86_64-Win_GUI.exe
-        set FILENAME_MSI=HandBrake-%HBDATE%-%gitHash%-x86_64-Win_GUI.msi
         set FILENAMEZIP=HandBrake-%HBDATE%-%gitHash%-x86_64-Win_GUI.zip
         echo %FILENAME%
-        echo %FILENAME_MSI%
         echo %FILENAMEZIP%
         echo "Renaming Windows Installer file"
         cd HandBrake/win/CS/HandBrakeWPF/bin/publish/
         dir
         move HandBrake-*-Win_GUI.exe %FILENAME%
-        move HandBrake-*-Win_GUI.msi %FILENAME_MSI%
         dir
         cd ..
         dir
@@ -258,13 +246,7 @@ jobs:
       with:
         name: HandBrake-x86_64-WinExe
         path: HandBrake/win/CS/HandBrakeWPF/bin/HandBrake/*-Win_GUI.exe
-
-    - name: Upload HandBrake msi Installer
-      uses: actions/upload-artifact@v3
-      with:
-        name: HandBrake-x86_64-WinMSI
-        path: HandBrake/win/CS/HandBrakeWPF/bin/HandBrake/*-Win_GUI.msi
-        
+       
     - name: Upload HandBrake Portable
       uses: actions/upload-artifact@v3
       with:
@@ -284,13 +266,7 @@ jobs:
         with:
           name: HandBrakeCLI
           path: win/
-          
-      - name: Download Artifacts - GUI x64 MSI
-        uses: actions/download-artifact@v3
-        with:
-          name: HandBrake-x86_64-WinMSI
-          path: win/
-          
+                   
       - name: Download Artifacts - GUI x64 EXE
         uses: actions/download-artifact@v3
         with:
@@ -308,12 +284,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: HandBrakeCLI_ARM64
-          path: win/
-          
-      - name: Download Artifacts - GUI ARM64 MSI
-        uses: actions/download-artifact@v3
-        with:
-          name: HandBrake-arm64-WinMSI
           path: win/
           
       - name: Download Artifacts - GUI ARM64 EXE
