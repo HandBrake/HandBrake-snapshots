@@ -10,7 +10,17 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Environment Setup
+    - name: Cargo-C Toolchain Cache
+      id: linux-cargo-c-toolchain
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cargo/bin/cargo-capi
+          ~/.cargo/bin/cargo-cbuild
+          ~/.cargo/bin/cargo-cinstall
+        key: linux-cargo-c-toolchain
+
+    - name: Setup Environment
       run: |
         sudo apt-get update
         sudo apt-get install -y autoconf automake autopoint appstream build-essential cmake git libass-dev libbz2-dev libfontconfig1-dev libfreetype6-dev libfribidi-dev libharfbuzz-dev libjansson-dev liblzma-dev libmp3lame-dev libnuma-dev libogg-dev libopus-dev libsamplerate-dev libspeex-dev -y 
@@ -26,6 +36,11 @@ jobs:
         sudo flatpak install -y org.freedesktop.Sdk.Extension.llvm14//21.08
         sudo flatpak install -y org.freedesktop.Sdk.Extension.llvm14//22.08
         sudo apt-get upgrade -y
+
+    - name: Setup Cargo-C Toolchain
+      if: steps.linux-cargo-c-toolchain.outputs.cache-hit != 'true'
+      run: |
+        cargo install cargo-c
         
     - name: Download the Source Code
       run: |

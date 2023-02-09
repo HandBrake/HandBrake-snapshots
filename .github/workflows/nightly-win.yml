@@ -12,9 +12,8 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v3
-    - uses: actions/setup-python@v4
 
-    - name: Environment Setup
+    - name: Setup Environment
       run: |
         sudo apt-get purge cmake -y
         sudo apt-get install automake autoconf build-essential intltool libtool libtool-bin make nasm patch tar yasm zlib1g-dev ninja-build gzip pax cmake
@@ -135,13 +134,23 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v3
-    - uses: actions/setup-python@v4
 
-    - name: Environment Setup
+    - name: Cargo-C Toolchain Cache
+      id: windows-cargo-c-toolchain
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cargo/bin/cargo-capi
+          ~/.cargo/bin/cargo-cbuild
+          ~/.cargo/bin/cargo-cinstall
+        key: windows-cargo-c-toolchain
+
+    - name: Setup Environment
       run: |
         sudo apt-get purge cmake -y
         sudo apt-get install automake autoconf build-essential intltool libtool libtool-bin make nasm patch tar yasm zlib1g-dev ninja-build gzip pax cmake
         sudo pip3 install meson
+        rustup target add x86_64-pc-windows-gnu
 
     - name: Setup Toolchain
       run: |
@@ -161,6 +170,11 @@ jobs:
             echo "Toolchain Verification FAILED. Exiting!"
             return -1
         fi
+
+    - name: Setup Cargo-C Toolchain
+      if: steps.windows-cargo-c-toolchain.outputs.cache-hit != 'true'
+      run: |
+        cargo install cargo-c
 
     - name: Build CLI and LibHB
       run: |

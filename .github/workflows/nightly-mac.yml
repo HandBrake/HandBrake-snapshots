@@ -20,18 +20,34 @@ jobs:
         path: ~/mac-toolchain
         key: mac-toolchain
 
+    - name: Cargo-C Toolchain Cache
+      id: mac-cargo-c-toolchain
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cargo/bin/cargo-capi
+          ~/.cargo/bin/cargo-cbuild
+          ~/.cargo/bin/cargo-cinstall
+        key: mac-cargo-c-toolchain
+
     - name: Download the Source Code
       run: |
         git clone https://github.com/HandBrake/HandBrake.git
 
-    - name: Setup Path
+    - name: Setup Environment
       run: |
         echo ~/mac-toolchain/bin >> $GITHUB_PATH
+        rustup target add aarch64-apple-darwin
 
-    - name: Setup Environment
+    - name: Setup Toolchain
       if: steps.mac-toolchain.outputs.cache-hit != 'true'
       run: |
-        HandBrake/scripts/mac-toolchain-build ~/mac-toolchain
+        scripts/mac-toolchain-build ~/mac-toolchain
+
+    - name: Setup Cargo-C Toolchain
+      if: steps.mac-cargo-c-toolchain.outputs.cache-hit != 'true'
+      run: |
+        cargo install cargo-c
 
     - name: Build HandBrake
       run: |
