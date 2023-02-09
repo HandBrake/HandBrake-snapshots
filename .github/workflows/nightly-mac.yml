@@ -37,6 +37,7 @@ jobs:
     - name: Setup Environment
       run: |
         echo ~/mac-toolchain/bin >> $GITHUB_PATH
+        rustup update
         rustup target add aarch64-apple-darwin
 
     - name: Setup Toolchain
