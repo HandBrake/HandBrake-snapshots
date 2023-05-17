@@ -37,10 +37,10 @@ jobs:
         sudo flatpak install -y org.freedesktop.Sdk.Extension.llvm14//22.08
         sudo apt-get upgrade -y
 
-    - name: Setup Cargo-C Toolchain
-      if: steps.linux-cargo-c-toolchain.outputs.cache-hit != 'true'
-      run: |
-        cargo install cargo-c
+   # - name: Setup Cargo-C Toolchain
+   #   if: steps.linux-cargo-c-toolchain.outputs.cache-hit != 'true'
+   #   run: |
+   #     cargo install cargo-c
         
     - name: Download the Source Code
       run: |
