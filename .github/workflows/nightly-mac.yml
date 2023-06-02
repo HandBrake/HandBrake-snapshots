@@ -28,7 +28,7 @@ jobs:
           ~/.cargo/bin/cargo-capi
           ~/.cargo/bin/cargo-cbuild
           ~/.cargo/bin/cargo-cinstall
-        key: mac-cargo-c-toolchain
+        key: ${{ runner.os }}-cargo-c-toolchain
 
     - name: Download the Source Code
       run: |
