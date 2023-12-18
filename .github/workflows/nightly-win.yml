@@ -80,7 +80,7 @@ jobs:
          nuget restore HandBrake.sln
 
     - name: Download LibHandBrake ARM 64
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
        name: LibHandBrake_ARM64
        path: HandBrake/win/CS/HandBrakeWPF/bin/publish
@@ -220,7 +220,7 @@ jobs:
          nuget restore HandBrake.sln
 
     - name: Download LibHandBrake
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
        name: LibHandBrake
        path: HandBrake/win/CS/HandBrakeWPF/bin/publish
@@ -276,38 +276,38 @@ jobs:
        
       # X64 Devices
       - name: Download Artifacts - CLI x64
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: HandBrakeCLI
           path: win/
                    
       - name: Download Artifacts - GUI x64 EXE
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: HandBrake-x86_64-WinExe
           path: win/
        
       - name: Download Artifacts - GUI x64 Portable
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: HandBrake-x86_64-WinPortable
           path: win/
       
       # ARM DEVICES
       - name: Download Artifacts - CLI ARM64
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: HandBrakeCLI_ARM64
           path: win/
           
       - name: Download Artifacts - GUI ARM64 EXE
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: HandBrake-arm64-WinExe
           path: win/
 
       - name: Download Artifacts - GUI ARM64 Portable
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: HandBrake-arm64-WinPortable
           path: win/
