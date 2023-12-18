@@ -54,7 +54,7 @@ jobs:
         nice make pkg.create.flatpak --jobs=1
 
     - name: Upload Assets
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: HandBrake-Flatpak
         path: ./HandBrake/build/pkg/flatpak/*.flatpak
