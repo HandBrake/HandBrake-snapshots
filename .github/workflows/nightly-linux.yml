@@ -1,8 +1,11 @@
 name: Flatpak Build
 
-on:  
-  workflow_dispatch: 
-  
+on:
+  schedule:
+    - cron:  '30 7 * * 1,5'
+
+  workflow_dispatch:
+
 jobs:
   build:
     name: Build on Linux
