@@ -9,26 +9,28 @@ on:
 jobs:
   build:
     name: Build on macOS
-    runs-on: macos-13
+    runs-on: macos-14
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_15.2.app/Contents/Developer
     steps:
     - uses: actions/checkout@v4
 
     - name: Toolchain Cache
-      id: mac-toolchain
+      id: mac-toolchain-arm
       uses: actions/cache@v4
       with:
         path: ~/mac-toolchain
-        key: mac-toolchain
+        key: mac-toolchain-arm
 
     - name: Cargo-C Toolchain Cache
-      id: mac-cargo-c-toolchain
+      id: mac-cargo-c-toolchain-arm
       uses: actions/cache@v4
       with:
         path: |
           ~/.cargo/bin/cargo-capi
           ~/.cargo/bin/cargo-cbuild
           ~/.cargo/bin/cargo-cinstall
-        key: ${{ runner.os }}-cargo-c-toolchain
+        key: mac-cargo-c-toolchain-arm
 
     - name: Download the Source Code
       run: |
@@ -37,16 +39,15 @@ jobs:
     - name: Setup Environment
       run: |
         echo ~/mac-toolchain/bin >> $GITHUB_PATH
-        rustup update
-        rustup target add aarch64-apple-darwin
+        rustup target add x86_64-apple-darwin
 
     - name: Setup Toolchain
-      if: steps.mac-toolchain.outputs.cache-hit != 'true'
+      if: steps.mac-toolchain-arm.outputs.cache-hit != 'true'
       run: |
         HandBrake/scripts/mac-toolchain-build ~/mac-toolchain
 
     - name: Setup Cargo-C Toolchain
-      if: steps.mac-cargo-c-toolchain.outputs.cache-hit != 'true'
+      if: steps.mac-cargo-c-toolchain-arm.outputs.cache-hit != 'true'
       run: |
         cargo install cargo-c
 
