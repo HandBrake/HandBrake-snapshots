@@ -34,8 +34,8 @@ jobs:
         sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
         sudo flatpak install -y flathub org.freedesktop.Sdk//24.08
         sudo flatpak install -y flathub org.freedesktop.Platform//24.08
-        sudo flatpak install -y flathub org.gnome.Platform//47
-        sudo flatpak install -y flathub org.gnome.Sdk//47
+        sudo flatpak install -y flathub org.gnome.Platform//48
+        sudo flatpak install -y flathub org.gnome.Sdk//48
         sudo flatpak install -y org.freedesktop.Sdk.Extension.llvm18//24.08
         sudo flatpak install -y org.freedesktop.Sdk.Extension.rust-stable//24.08
         sudo apt-get upgrade -y
