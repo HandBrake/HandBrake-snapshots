@@ -55,7 +55,8 @@ jobs:
         ./configure --launch-jobs=1 --flatpak --enable-qsv --enable-vce --enable-nvenc --enable-nvdec
         cd build
         nice make pkg.create.flatpak --jobs=1
-        cd pkgcd flatpak
+        cd pkg
+        cd flatpak
         rename 's/fr.handbrake.ghb/HandBrake/' *.flatpak
         rename 's/fr.handbrake.ghb.Plugin/Plugin.HandBrake/' *.flatpak
         rename 's/-master//' *.flatpak
