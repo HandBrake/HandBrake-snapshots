@@ -9,16 +9,16 @@ on:
 jobs:
   build_mingw_arm:
     name: CLI / LibHB (ARM)
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v4
 
     - name: Setup Environment
       run: |
         sudo apt-get purge cmake -y
-        sudo apt-get install automake autoconf build-essential intltool libtool libtool-bin make nasm patch tar yasm zlib1g-dev ninja-build gzip pax cmake
-        sudo pip3 install meson
-        
+        sudo apt-get install automake autoconf build-essential intltool libtool libtool-bin make meson nasm patch tar yasm zlib1g-dev ninja-build gzip pax cmake
+        rustup target add aarch64-pc-windows-gnullvm
+
     - name: Setup Toolchain
       run: |
         wget https://github.com/HandBrake/HandBrake-toolchains/releases/download/1.0/llvm-mingw-20250319-msvcrt-ubuntu-20.04-x86_64.tar.xz
@@ -35,7 +35,12 @@ jobs:
             echo "Toolchain Verification FAILED. Exiting!"
             return -1
         fi
-        
+
+    - name: Setup Cargo-C Toolchain
+      if: steps.windows-cargo-c-toolchain.outputs.cache-hit != 'true'
+      run: |
+        cargo install cargo-c
+
     - name: Build CLI and LibHB
       run: |
         CWDIR=$(pwd)
@@ -148,8 +153,7 @@ jobs:
     - name: Setup Environment
       run: |
         sudo apt-get purge cmake -y
-        sudo apt-get install automake autoconf build-essential intltool libtool libtool-bin make nasm patch tar yasm zlib1g-dev ninja-build gzip pax cmake
-        sudo pip3 install meson
+        sudo apt-get install automake autoconf build-essential intltool libtool libtool-bin make meson nasm patch tar yasm zlib1g-dev ninja-build gzip pax cmake
         rustup target add x86_64-pc-windows-gnu
 
     - name: Setup Toolchain
