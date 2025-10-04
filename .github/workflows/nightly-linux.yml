@@ -36,8 +36,8 @@ jobs:
         sudo flatpak install -y flathub org.freedesktop.Platform//24.08
         sudo flatpak install -y flathub org.gnome.Platform//49
         sudo flatpak install -y flathub org.gnome.Sdk//49
-        sudo flatpak install -y org.freedesktop.Sdk.Extension.llvm18//24.08
-        sudo flatpak install -y org.freedesktop.Sdk.Extension.rust-stable//24.08
+        sudo flatpak install -y org.freedesktop.Sdk.Extension.llvm21//25.08
+        sudo flatpak install -y org.freedesktop.Sdk.Extension.rust-stable//25.08
         sudo apt-get upgrade -y
 
     - name: Setup Cargo-C Toolchain
