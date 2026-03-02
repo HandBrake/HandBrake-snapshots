@@ -62,7 +62,7 @@ jobs:
         rename 's/-master//' *.flatpak
 
     - name: Upload Assets
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: HandBrake-Flatpak
         path: ./HandBrake/build/pkg/flatpak/*.flatpak
