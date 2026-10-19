@@ -32,12 +32,12 @@ jobs:
         sudo python -m pip install meson
         sudo apt-get install flatpak flatpak-builder
         sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-        sudo flatpak install -y flathub org.freedesktop.Sdk//24.08
-        sudo flatpak install -y flathub org.freedesktop.Platform//24.08
-        sudo flatpak install -y flathub org.gnome.Platform//49
-        sudo flatpak install -y flathub org.gnome.Sdk//49
-        sudo flatpak install -y org.freedesktop.Sdk.Extension.llvm21//25.08
-        sudo flatpak install -y org.freedesktop.Sdk.Extension.rust-stable//25.08
+        sudo flatpak install -y flathub org.freedesktop.Sdk//26.08
+        sudo flatpak install -y flathub org.freedesktop.Platform//26.08
+        sudo flatpak install -y flathub org.gnome.Platform//51
+        sudo flatpak install -y flathub org.gnome.Sdk//51
+        sudo flatpak install -y org.freedesktop.Sdk.Extension.llvm22//26.08
+        sudo flatpak install -y org.freedesktop.Sdk.Extension.rust-stable//26.08
         sudo apt-get upgrade -y
 
     - name: Setup Cargo-C Toolchain
